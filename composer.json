@@ -1,0 +1,27 @@
+{
+    "name": "kiwicommerceltd/boodil",
+    "description": "Boodil Open Banking Gateway",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "homepage": "https://github.com/kiwicommerceltd/boodil",
+    "require": {
+        "php": "~7.3.0||~7.4.0||~8.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "KiwiCommerce Ltd",
+            "email": "support@kiwicommerce.co.uk"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Boodil\\Payment\\": ""
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

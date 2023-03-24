@@ -1,0 +1,17 @@
+<script>
+    require([
+        'Magento_Customer/js/customer-data'
+    ], function (customerData) {
+
+        setTimeout(function () {
+            var sections = ['cart'];
+            customerData.get('cart').subscribe(function (cart) {
+                if (cart.summary_count > 0) {
+                    customerData.invalidate(sections);
+                    customerData.reload(sections, true);
+                }
+            })
+
+        }, 1)
+    });
+</script>

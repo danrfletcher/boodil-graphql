@@ -1,0 +1,19 @@
+{
+    "boodil_payment_transaction": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "uuid": true,
+            "description": true,
+            "status": true,
+            "status_code": true,
+            "points": true,
+            "created_at": true,
+            "updated_at": true,
+            "times": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
