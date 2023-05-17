@@ -128,7 +128,7 @@ abstract class BoodilpayAbstract extends Action
         }
         $params = [
             "merchantUuid" => $this->boodileApiInterface->getMerchantUuid(),
-            "reference" => $order->getReservedOrderId(),
+            /*"reference" => $order->getReservedOrderId(),*/
             "email" => $order->getCustomerEmail() ?? $order->getBillingAddress()->getEmail(),
             "amount" => $order->getGrandTotal(),
             "currency" => $order->getQuoteCurrencyCode(),

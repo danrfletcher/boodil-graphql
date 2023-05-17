@@ -8,6 +8,7 @@ use Magento\Checkout\Helper\Data;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\RequestInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
 
@@ -38,6 +39,11 @@ class Boodil
      */
     private $transactionsFactory;
 
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
     private $_order;
 
     /**
@@ -46,6 +52,7 @@ class Boodil
      * @param Data $checkoutData
      * @param CartManagementInterface $quoteManagement
      * @param TransactionsFactory $transactionsFactory
+     * @param RequestInterface $request
      * @param array $params
      * @throws Exception
      */
@@ -54,6 +61,7 @@ class Boodil
         Data $checkoutData,
         CartManagementInterface $quoteManagement,
         TransactionsFactory $transactionsFactory,
+        RequestInterface $request,
         $params = []
     ) {
         if (isset($params['quote']) && $params['quote'] instanceof Quote) {
@@ -65,6 +73,7 @@ class Boodil
         $this->_customerSession = $customerSession;
         $this->_checkoutData = $checkoutData;
         $this->_quoteManagement = $quoteManagement;
+        $this->request = $request;
         $this->transactionsFactory = $transactionsFactory;
     }
 
@@ -73,6 +82,15 @@ class Boodil
      */
     public function placeOrder()
     {
+        $transaction = $this->transactionsFactory->create();
+        $collection = $transaction->getCollection()
+            ->addFieldToFilter('uuid', $this->request->getParam('uuid'))
+            ->getFirstItem();
+
+        if ($collection->getUuid() === $this->request->getParam('uuid')) {
+            return;
+        }
+
         if ($this->getCheckoutMethod() == Onepage::METHOD_GUEST) {
             $this->prepareGuestQuote();
         }
