@@ -12,7 +12,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Boodil\Payment\Model\TransactionsFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\HTTP\ZendClientFactory as ClientFactory;
+use Magento\Framework\HTTP\Client\CurlFactory as ClientFactory;
 use Magento\Sales\Api\InvoiceOrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
@@ -178,10 +178,10 @@ class BoodilApi implements BoodilApiInterface
             $this->scopeConfig->getValue(self::XML_PATH_BOODIL_ACCESS_KEY, $storeScope)
         );
 
-        return [
-            'Content-Type:application/json',
-            'Authorization: Basic ' . base64_encode($userName . ":" . $accessKey)
-        ];
+        $client = $this->httpClientFactory->create();
+        $client->setCredentials($userName, $accessKey);
+
+        return $client;
     }
 
     /**
@@ -189,20 +189,13 @@ class BoodilApi implements BoodilApiInterface
      * @param array $params
      * @param string $method
      * @param array $headers
-     * @param bool $assoc
-     * @param bool $statusCode
+     * @param false $assoc
+     * @param false $statusCode
      * @return array|mixed|string
-     * @throws \Zend_Http_Client_Exception
      */
     public function callCurl($url, $params = [], $method = 'GET', $headers = [], $assoc = false, $statusCode = false)
     {
-        $client = $this->httpClientFactory->create();
-        if (empty($headers)) {
-            $headers = $this->getAuthHeaders();
-        }
-        $client->setHeaders($headers);
-        $client->setMethod($method);
-
+        $client = $this->getAuthHeaders();
         $paramString = null;
         if ($params) {
             if ($method == 'GET') {
@@ -211,21 +204,21 @@ class BoodilApi implements BoodilApiInterface
                 }
                 $paramString = implode('&', $param);
             } else {
-                $client->setRawData($this->json->serialize($params));
+                $client->post($url, $params);
             }
         }
 
         if ($paramString) {
             $url .= "?" . $paramString;
+            $client->get($url);
         }
-        $client->setUri($url);
+
         try {
-            $result = $client->request();
-            $responseBody = $result->getBody();
+            $responseBody = $client->getBody();
             if ($statusCode) {
                 return [
                     "responseBody" => json_decode($responseBody, $assoc),
-                    "responseCode" => $result->getStatus()
+                    "responseCode" => $client->getStatus()
                 ];
             }
             $jsonResult = json_decode($responseBody, $assoc);
