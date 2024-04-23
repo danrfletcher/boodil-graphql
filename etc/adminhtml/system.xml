@@ -41,6 +41,9 @@
                 <field id="success_url" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Success Page</label>
                 </field>
+                <field id="headless_callback_url" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Headless Callback URL</label>
+                </field>
             </group>
         </section>
     </system>
