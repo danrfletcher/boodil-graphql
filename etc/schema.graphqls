@@ -1,0 +1,13 @@
+input BoodilPaymentInput {
+  cartId: String
+}
+
+type Mutation {
+  initiateBoodilPayment(input: BoodilPaymentInput): BoodilPaymentResponse
+    @resolver(class: "\\Boodil\\Payment\\Model\\Resolver\\InitiatePayment")
+}
+
+type BoodilPaymentResponse {
+  uuid: String
+  error: String
+}

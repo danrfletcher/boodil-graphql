@@ -150,6 +150,9 @@ abstract class BoodilpayAbstract extends Action
         $headers = $this->boodileApiInterface->getAuthHeaders();
         $boodilApiUrl = $this->boodileApiInterface->getApiUrl("transactions");
 
+        // Logging request parameters
+        $this->logger->info('Request parameters to Boodil API: ' . json_encode($params));
+
         try {
             $merchantUuid = $this->boodileApiInterface->callCurl(
                 $boodilApiUrl,
@@ -158,7 +161,10 @@ abstract class BoodilpayAbstract extends Action
                 $headers,
                 true
             );
+            // Logging successful response
+            $this->logger->info('Received UUID from Boodil API: ' . json_encode($merchantUuid));
         } catch (\Exception $e) {
+            // Logging exceptions
             $this->logger->debug('Boodil\\Payment\\Controller\\BoodilpayAbstract\\createTransactionsApi: '. $e->getMessage());
             return $e->getMessage();
         }
