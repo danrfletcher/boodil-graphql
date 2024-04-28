@@ -1,8 +1,8 @@
 <?php
 namespace Boodil\Payment\Model\Resolver;
 
-use Boodil\Payment\Api\BoodilApiInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Boodil\Payment\Api\BoodilApiInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\GuestCartRepositoryInterface;
@@ -12,7 +12,7 @@ use Boodil\Payment\Logger\Logger;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Exception;
 
-class InitiatePayment implements ResolverInterface
+class CreateTransaction implements ResolverInterface
 {
     protected $logger;
     protected $cartRepository;
@@ -78,9 +78,6 @@ class InitiatePayment implements ResolverInterface
 
         $headers = $this->boodileApiInterface->getAuthHeaders();
         $boodilApiUrl = $this->boodileApiInterface->getApiUrl("transactions");
-
-        // Logging request parameters
-        $this->logger->info('Request parameters to Boodil API: ' . json_encode($params));
 
         try {
             $paymentUuid = $this->boodileApiInterface->callCurl(

@@ -18,12 +18,31 @@
         </arguments>
     </type>
 
-    <type name="Boodil\Payment\Model\Resolver\InitiatePayment">
+    <type name="Boodil\Payment\Model\Resolver\CreateTransaction">
         <arguments>
             <argument name="logger" xsi:type="object">Boodil\Payment\Logger\Logger</argument>
             <argument name="guestCartRepository" xsi:type="object">Magento\Quote\Api\GuestCartRepositoryInterface</argument>
             <argument name="boodileApiInterface" xsi:type="object">Boodil\Payment\Api\BoodilApiInterface</argument>
             <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface</argument>
+        </arguments>
+    </type>
+
+    <type name="Boodil\Payment\Model\Resolver\CreatePayment">
+        <arguments>
+            <argument name="logger" xsi:type="object">Boodil\Payment\Logger\Logger</argument>
+            <argument name="guestCartRepository" xsi:type="object">Magento\Quote\Api\GuestCartRepositoryInterface</argument>
+            <argument name="boodileApiInterface" xsi:type="object">Boodil\Payment\Api\BoodilApiInterface</argument>
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface</argument>
+            <argument name="headlessService" xsi:type="object">Boodil\Payment\Model\Service\Headless</argument>
+        </arguments>
+    </type>
+
+    <type name="Boodil\Payment\Model\Service\Headless">
+        <arguments>
+            <argument name="logger" xsi:type="object">Boodil\Payment\Logger\Logger</argument>
+            <argument name="guestCartRepository" xsi:type="object">Magento\Quote\Api\GuestCartRepositoryInterface</argument>
+            <argument name="cartManagement" xsi:type="object">Magento\Quote\Api\CartManagementInterface</argument>
+            <argument name="quoteManagement" xsi:type="object">Magento\Quote\Model\QuoteManagement</argument>
         </arguments>
     </type>
 </config>

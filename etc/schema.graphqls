@@ -1,13 +1,35 @@
-input BoodilPaymentInput {
+# -----INPUTS-----
+input createBoodilTransactionInput {
   cartId: String
 }
 
-type Mutation {
-  initiateBoodilPayment(input: BoodilPaymentInput): BoodilPaymentResponse
-    @resolver(class: "\\Boodil\\Payment\\Model\\Resolver\\InitiatePayment")
+input createBoodilPaymentInput {
+  uuid: String
+  consentToken: String
+  cartId: String
 }
 
-type BoodilPaymentResponse {
+# -----MUTATIONS-----
+type Mutation {
+  createBoodilTransaction(input: createBoodilTransactionInput): createBoodilTransactionResponse
+    @resolver(class: "\\Boodil\\Payment\\Model\\Resolver\\CreateTransaction")
+  
+  createBoodilPayment(input: createBoodilPaymentInput): createBoodilPaymentResponse
+    @resolver(class: "\\Boodil\\Payment\\Model\\Resolver\\CreatePayment")
+}
+
+# -----OUTPUTS-----
+type createBoodilTransactionResponse {
   uuid: String
   error: String
+}
+
+type createBoodilPaymentResponse {
+  processingTime: String,
+  uuid: String,
+  reference: String,
+  amount: Float,
+  currency: String,
+  orderId: String,
+  statusCode: String
 }
